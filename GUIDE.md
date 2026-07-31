@@ -20,7 +20,7 @@ claude --plugin-dir /path/to/engineering-agents
 Once installed, confirm it loaded:
 
 ```
-/help          # the four commands (/feature, /bugfix, /review, /spec) appear
+/help          # the five commands (/kickoff, /feature, /bugfix, /review, /spec) appear
 /agents        # the six specialists appear
 ```
 
@@ -32,6 +32,7 @@ keep those two directories in your project (or edit the copies shipped here).
 
 | You want to… | Use | It will… |
 |---|---|---|
+| Start a greenfield project | `/kickoff <what>` | interview you, then PRD → SDD + ADR backbone → task list (docs only, no code) |
 | Build something new | `/feature <what>` | spec → architecture → schema → build → review, with approval gates |
 | Fix a defect | `/bugfix <the bug>` | reproduce → root cause → failing test → fix → verify |
 | Check code before merge | `/review [PR/branch]` | run two review lenses, verify findings, report (no auto-fix) |
@@ -42,6 +43,35 @@ language and Claude will match it to the right skill by its description. The
 commands exist for when you want to be explicit and deterministic.
 
 ## Walkthroughs
+
+### Start a greenfield project — `/kickoff`
+
+```
+/kickoff a service that ingests bank webhooks and reconciles them nightly
+```
+
+Use this at the very beginning of a **new** project — before there's code to
+put a feature into. What happens, in order:
+
+1. **Discovery interview** — Claude (the orchestrator, not an agent) asks you
+   about the business and the problem, **one question at a time**: who has the
+   problem, why now, what success looks like, constraints. It also proposes a
+   `{SLUG}` for the repo and asks you to confirm it. Notes land in
+   `docs/scoping/{SLUG}-discovery.md`. **You approve the scoping.**
+2. **PRD** — `product-manager` turns the interview into `PRD-{SLUG}-001`.
+   **You approve it.**
+3. **Architecture drawn** — `architect` writes `ADR-{SLUG}-001` (the SDD, with
+   C4 context→container→component diagrams) plus the backbone ADRs it owns;
+   `database-engineer` writes the database ADR (schema *designed*, not
+   migrated) and `qa` writes the testing ADR. **You approve the architecture.**
+4. **Task breakdown** — the documented architecture is decomposed into a
+   dependency-ordered task list in `docs/plan/{SLUG}-build-plan.md`, each task
+   citing its ADR and acceptance criteria.
+
+Then it **stops.** Kickoff produces docs only — no code. Build the tasks
+afterward, one at a time, with `/feature`. See
+[the numbering methodology](standards/adr-methodology.md) for the `ADR-{SLUG}-NNN`
+convention.
 
 ### Build a feature — `/feature`
 
@@ -111,15 +141,16 @@ question is surfaced rather than answered by assumption. Use this when the
 requirements are vague or contested and you want them nailed down before
 committing engineering time.
 
-## All nine skills
+## All ten skills
 
-The four commands cover the most common paths, but the plugin ships **nine**
-workflow skills. The other five have no slash command — you invoke them by
+The five commands cover the most common paths, but the plugin ships **ten**
+workflow skills. The others have no slash command — you invoke them by
 describing the task, and Claude matches the skill by its description. (You can
 also name one explicitly: *"use the incident skill"*.)
 
 | Skill | Command | Invoke by saying… | Core discipline |
 |---|---|---|---|
+| `project-kickoff` | `/kickoff` | "new project / start building X from scratch" | discovery interview → PRD → SDD + ADR backbone → task list; docs only |
 | `new-feature` | `/feature` | "build / add …" | human gates after spec and architecture |
 | `bug-fix` | `/bugfix` | "fix … / this is broken" | reproduce → root cause → **failing test** → fix |
 | `code-review` | `/review` | "review this PR / is this ready to merge" | two lenses, findings verified before reported |

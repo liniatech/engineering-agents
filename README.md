@@ -1,6 +1,6 @@
 # engineering-agents
 
-A reusable engineering team for Claude Code: six specialist agents, nine
+A reusable engineering team for Claude Code: six specialist agents, ten
 workflow pipelines, and the standards and templates they read.
 
 New here and just want to use it? See the **[usage guide](GUIDE.md)**. This
@@ -109,6 +109,7 @@ code, `qa` judges whether the tests prove the spec.
 
 | Skill | Use for | Core discipline |
 |---|---|---|
+| `project-kickoff` | starting a greenfield project | discovery interview → PRD → SDD + ADR backbone; ends at a task list |
 | `new-feature` | building something new | human gates after spec and architecture |
 | `bug-fix` | a defect | reproduce → root cause → **failing test** → fix |
 | `code-review` | a diff or PR | two parallel lenses, findings verified before reported |
@@ -121,6 +122,7 @@ code, `qa` judges whether the tests prove the spec.
 
 ## Commands
 
+- `/kickoff <what to build>` — greenfield project: interview → PRD → ADRs → tasks
 - `/feature <what to build>` — full pipeline with approval gates
 - `/bugfix <the bug>` — root-cause-first fix
 - `/review [PR or branch]` — multi-lens review
@@ -133,7 +135,7 @@ and runs it. The commands are for when you want to be explicit.
 
 1. **Model-driven** — write good `description` fields and let Claude pick.
    Flexible, non-deterministic; it may skip a step you wanted.
-2. **Skill-as-procedure** — what the nine skills here are. You write the
+2. **Skill-as-procedure** — what the ten skills here are. You write the
    sequence in prose; Claude executes it. Deterministic enough, editable,
    no code. **Start here.**
 3. **Workflow scripts** — real JS with parallel fan-out, for fifty items.
