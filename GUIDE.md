@@ -48,10 +48,14 @@ commands exist for when you want to be explicit and deterministic.
 
 ```
 /kickoff a service that ingests bank webhooks and reconciles them nightly
+/kickoff --lang pt-BR um serviço de reserva de mesas para o escritório
 ```
 
 Use this at the very beginning of a **new** project — before there's code to
-put a feature into. What happens, in order:
+put a feature into. Documents come out **tight and diagram-first** (one mermaid
+diagram per ADR, C4 in the SDD, a task-dependency graph in the plan), in the
+**language you choose** — English or Brazilian Portuguese (`--lang en|pt-BR`, or
+it asks). What happens, in order:
 
 1. **Discovery interview** — Claude (the orchestrator, not an agent) asks you
    about the business and the problem, **one question at a time**: who has the

@@ -8,6 +8,16 @@ is the kickoff's final deliverable. Each task is built separately afterward
 
 Build tasks top to bottom. A task lists what must exist before it starts.
 
+## Dependency graph
+
+```mermaid
+flowchart TD
+  T1[T1 — foundation] --> T2[T2 — …]
+  T1 --> T3[T3 — …]
+  T2 --> T5[T5 — core]
+  T3 --> T5
+```
+
 ## Tasks
 
 ### T1 — <short title>

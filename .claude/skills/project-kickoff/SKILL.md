@@ -38,6 +38,47 @@ Subagents share no context. Anything crossing a handoff is written to a file
 and its **path** passed to the next agent. Agents return the document text;
 **you** save it to the numbered path.
 
+## Output style — diagram-first and tight
+
+Kickoff docs are read by busy people; optimise for scanning, not completeness.
+Pass these limits to every agent you spawn.
+
+- **One diagram per ADR, always.** Each backbone ADR carries exactly one
+  mermaid diagram that shows the decision at a glance. The SDD carries the
+  three C4 diagrams (L1→L2→L3); the build plan carries a task-dependency graph.
+  Suggested diagram per topic:
+
+  | ADR | Topic | Diagram |
+  |---|---|---|
+  | 002 | auth | `sequenceDiagram` of the login flow |
+  | 003 | database | ER sketch or the key constraint/table |
+  | 004 | api | `sequenceDiagram` of the success-vs-conflict path |
+  | 005 | observability | `flowchart` of the signal → alert path |
+  | 006 | infrastructure | `flowchart`/C4 deployment view |
+  | 007 | ci/cd | `flowchart` of the pipeline stages |
+  | 008 | security | `flowchart` of the trust boundary |
+  | 009 | testing | the test pyramid as a `flowchart` |
+
+- **Tight prose.** Each backbone ADR ≤ ~350 words outside its diagram/tables;
+  the SDD ≤ ~500. Lead with the Decision. Do not restate the PRD or context the
+  reader already has. Prefer a table or list over a paragraph.
+- **Delete, don't pad.** One decision per ADR; if a section adds nothing,
+  remove it rather than fill it.
+
+## Language
+
+Kickoff produces every document in one language: **English (`en`)** or
+**Brazilian Portuguese (`pt-BR`)**. Settle it before Phase 1:
+
+- If the user passed one (e.g. `/kickoff --lang pt-BR …`), use it.
+- Otherwise ask once during Phase 0; default to English if they have no
+  preference.
+
+Record the choice in the discovery doc and **pass it to every agent** — they
+write all prose (and may localise section headings) in that language. Keep
+language-neutral: document IDs (`ADR-{SLUG}-NNN`), file names, the slug, code,
+SQL, and mermaid keywords.
+
 ## Steps
 
 ### 0. Discovery interview — you, not an agent
@@ -51,22 +92,29 @@ invent answers — an unanswered question stays open.
 Propose a `{SLUG}` (kebab-case, from the service name) and get the user to
 confirm it. It is fixed for the life of the repo.
 
-Write the notes to `docs/scoping/{SLUG}-discovery.md`.
+Settle the output **language** here (see the Language section) if it was not
+passed on the command line.
+
+Write the notes to `docs/scoping/{SLUG}-discovery.md`, and record the chosen
+language in that file.
 
 **GATE — human.** Show the scoping summary and the open questions. Get a yes
 before spending an agent on a PRD built on the wrong problem.
 
 ### 1. PRD
 
-Spawn `product-manager` with the discovery-doc path. It returns a PRD; save it
-to `docs/ADRs/PRD-{SLUG}-001.md`.
+Spawn `product-manager` with the discovery-doc path, the chosen language, and
+the Output-style limits (tight prose, no restated context). It returns a PRD;
+save it to `docs/ADRs/PRD-{SLUG}-001.md`.
 
 **GATE — human.** Show the Summary and Open questions. Do not proceed on
 unanswered `[NEEDS INPUT]` markers that affect scope.
 
 ### 2. Architecture — drawn, then decided
 
-Spawn `architect` with the PRD path. Tell it to produce, using
+Spawn `architect` with the PRD path, the chosen language, and the Output-style
+limits (one mermaid diagram per ADR from the topic table; each backbone ADR
+≤ ~350 words, the SDD ≤ ~500; decision-first). Tell it to produce, using
 `templates/sdd.md` and `templates/adr.md`:
 
 - `ADR-{SLUG}-001` — the SDD, with C4 as mermaid: L1 context → L2 containers →
@@ -75,7 +123,8 @@ Spawn `architect` with the PRD path. Tell it to produce, using
   `006` infra, `007` cicd, `008` security.
 
 Then spawn the specialists for their backbone topics, each with the PRD and SDD
-paths:
+paths, the chosen language, and the same Output-style limits (one diagram,
+≤ ~350 words):
 
 - `database-engineer` → `ADR-{SLUG}-003` (database). Schema is **designed and
   documented here — no migration is written.** This is a decision doc.
@@ -94,7 +143,8 @@ Architecture is the expensive thing to undo; get a human yes.
 Read the backbone ADRs and the PRD and decompose them into build tasks, using
 `templates/build-plan.md`. Every task cites the ADR it implements and carries
 acceptance criteria drawn from the PRD and `ADR-{SLUG}-009`. Order the tasks by
-dependency. Write to `docs/plan/{SLUG}-build-plan.md`.
+dependency and include a **mermaid task-dependency graph**. Keep each task to a
+line or two. Write it in the chosen language to `docs/plan/{SLUG}-build-plan.md`.
 
 **GATE — human.** Show the task list. This is where kickoff ends.
 
