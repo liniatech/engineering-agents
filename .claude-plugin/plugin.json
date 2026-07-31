@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "engineering-agents",
+  "displayName": "Engineering Agents",
+  "version": "0.1.0",
+  "description": "A reusable engineering team for Claude Code: six specialist agents, nine workflow pipelines, and the standards and templates they read.",
+  "author": {
+    "name": "Alini Ribeiro",
+    "email": "alini@launchpotato.com",
+    "url": "https://github.com/liniatech"
+  },
+  "homepage": "https://github.com/liniatech/engineering-agents",
+  "repository": "https://github.com/liniatech/engineering-agents.git",
+  "keywords": [
+    "agents",
+    "engineering",
+    "code-review",
+    "bug-fix",
+    "release",
+    "architecture",
+    "workflow"
+  ],
+  "agents": ["./.claude/agents/"],
+  "commands": ["./.claude/commands/"],
+  "skills": ["./.claude/skills/"]
+}

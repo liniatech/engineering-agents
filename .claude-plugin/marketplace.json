@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "liniatech",
+  "owner": {
+    "name": "Alini Ribeiro",
+    "email": "alini@launchpotato.com",
+    "url": "https://github.com/liniatech"
+  },
+  "plugins": [
+    {
+      "name": "engineering-agents",
+      "description": "A reusable engineering team for Claude Code: six specialist agents, nine workflow pipelines, and the standards and templates they read.",
+      "source": {
+        "source": "github",
+        "repo": "liniatech/engineering-agents"
+      }
+    }
+  ]
+}
