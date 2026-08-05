@@ -20,7 +20,7 @@ claude --plugin-dir /path/to/engineering-agents
 Once installed, confirm it loaded:
 
 ```
-/help          # the commands (/li-kickoff, /li-feature, /li-bugfix, /li-diagnose, /li-review, /li-spec, /li-demo) appear
+/help          # the commands (/li-kickoff, /li-feature, /li-bugfix, /li-diagnose, /li-fixtests, /li-review, /li-spec, /li-demo) appear
 /agents        # the six specialists appear
 ```
 
@@ -36,6 +36,7 @@ keep those two directories in your project (or edit the copies shipped here).
 | Build something new | `/li-feature <what>` | spec → architecture → schema → build → review, with approval gates |
 | Fix a defect | `/li-bugfix <the bug>` | diagnose (gated) → failing test → ticket → fix → verify |
 | Diagnose without fixing | `/li-diagnose <the bug>` | deep root cause + repro test + bug ticket, then stop |
+| Repair a red test suite | `/li-fixtests` | attribute failures to the likely commit, fix only stale tests |
 | Check code before merge | `/li-review [PR/branch]` | run two review lenses, verify findings, report (no auto-fix) |
 | Turn an idea into a PRD | `/li-spec <idea>` | write the PRD only — no design, no code |
 
@@ -157,6 +158,39 @@ want to triage and file, and let someone else (or a later session) do the fix:
 Passing a ticket path to `/li-bugfix` skips phase 1 — it re-confirms the repro
 and goes straight to fixing.
 
+### Repair a red test suite — `/li-fixtests`
+
+```
+/li-fixtests                    # the whole suite
+/li-fixtests tests/auth         # narrow it
+```
+
+Use this when the suite went red after a merge, rebase, or dependency bump —
+*many* failures at once, and you don't yet know whether the code broke or the
+tests went stale. (One misbehaving thing you already understand is
+`/li-bugfix`.)
+
+1. Runs the full suite and shows you the real output.
+2. **Groups** the failures by shared cause — twelve red tests are usually two
+   causes.
+3. Attributes each group to the **likely** commit via `git log`. It will say
+   "likely `a1b2c3d`", not "`a1b2c3d` broke it" — `git log` proves a commit
+   touched the code, never that it caused the failure. Ask for `git bisect` if
+   you want actual proof.
+4. Gives each group a verdict — **stale test** / **real bug** / **flake** — and
+   **unsure counts as real bug**, never stale.
+5. **Stops** and shows you the table before editing anything.
+
+The hard boundary: **it only ever edits test files.** A real regression is
+reported and handed to `/li-bugfix`; it will not make the suite green by
+adjusting an assertion, and it won't `skip` or delete a test to get there. If
+you tell it to "just fix everything", it will still refuse the real-bug rows and
+say why.
+
+After repairs pass, it spawns `li-qa` to add complementary tests for edge cases
+the changed behavior left uncovered. The final report says what's *still* red
+and where that work goes.
+
 ### Review code — `/li-review`
 
 ```
@@ -181,7 +215,7 @@ question is surfaced rather than answered by assumption. Use this when the
 requirements are vague or contested and you want them nailed down before
 committing engineering time.
 
-## All ten skills
+## All eleven skills
 
 The five commands cover the most common paths, but the plugin ships **ten**
 workflow skills. The others have no slash command — you invoke them by
@@ -193,6 +227,7 @@ also name one explicitly: *"use the incident skill"*.)
 | `li-project-kickoff` | `/li-kickoff` | "new project / start building X from scratch" | discovery interview → PRD → SDD + ADR backbone → task list; docs only |
 | `li-new-feature` | `/li-feature` | "build / add …" | human gates after spec and architecture |
 | `li-bug-fix` | `/li-bugfix`, `/li-diagnose` | "fix … / this is broken" / "diagnose this error" | hypothesis elimination → blast radius → **failing test** → ticket → gate → fix |
+| `li-test-repair` | `/li-fixtests` | "the suite is red / fix the failing tests" | verdict per failure; **edits tests only**, hands real bugs to `li-bug-fix` |
 | `li-code-review` | `/li-review` | "review this PR / is this ready to merge" | two lenses, findings verified before reported |
 | `li-architecture-review` | — | "review this design / ADR / RFC" | boundaries & failure modes; catches over- *and* under-engineering |
 | `li-database-change` | — | "add a column / write this migration / add an index" | expand/contract, lock analysis; **humans run migrations** |

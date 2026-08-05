@@ -1,6 +1,6 @@
 # engineering-agents
 
-A reusable engineering team for Claude Code: six specialist agents, ten
+A reusable engineering team for Claude Code: six specialist agents, eleven
 workflow pipelines, and the standards and templates they read.
 
 New here and just want to use it? See the **[usage guide](GUIDE.md)**. This
@@ -13,7 +13,7 @@ Two layers, deliberately separated:
 ```
 .claude/            ← the machine layer. Claude Code reads this.
   agents/           six specialists, each with its own fresh context
-  skills/           ten orchestration procedures
+  skills/           eleven orchestration procedures
   commands/         slash-command entry points
 
 standards/          ← the human layer. People read it; agents are TOLD to.
@@ -53,7 +53,7 @@ marketplace defined in `.claude-plugin/marketplace.json`:
 ```
 
 `liniatech` is the marketplace name; `engineering-agents` is the plugin. After
-installing, the six agents, ten skills, and seven commands are available in any
+installing, the six agents, eleven skills, and eight commands are available in any
 project — no per-repo copy required.
 
 ## The three mechanisms
@@ -112,6 +112,7 @@ code, `li-qa` judges whether the tests prove the spec.
 | `li-project-kickoff` | starting a greenfield project | discovery interview → PRD → SDD + ADR backbone; ends at a task list |
 | `li-new-feature` | building something new | human gates after spec and architecture |
 | `li-bug-fix` | a defect | hypothesis elimination → blast radius → **failing test** → ticket → gate → fix |
+| `li-test-repair` | a red suite | verdict per failure; **only test files are edited** |
 | `li-code-review` | a diff or PR | two parallel lenses, findings verified before reported |
 | `li-database-change` | schema work | expand/contract; humans run migrations |
 | `li-architecture-review` | a design or ADR | catches over- *and* under-engineering |
@@ -126,6 +127,7 @@ code, `li-qa` judges whether the tests prove the spec.
 - `/li-feature <what to build>` — full pipeline with approval gates
 - `/li-bugfix <the bug>` — root-cause-first fix, diagnosis gated
 - `/li-diagnose <the bug>` — deep diagnosis + repro test + bug ticket, no fix
+- `/li-fixtests [filter]` — repair a red suite; stale tests only, never source
 - `/li-review [PR or branch]` — multi-lens review
 - `/li-spec <idea>` — PRD only, no code
 - `/li-demo [brief]` — self-test: run kickoff on a brief (default the Roomie one) and regenerate the example
@@ -137,7 +139,7 @@ and runs it. The commands are for when you want to be explicit.
 
 1. **Model-driven** — write good `description` fields and let Claude pick.
    Flexible, non-deterministic; it may skip a step you wanted.
-2. **Skill-as-procedure** — what the ten skills here are. You write the
+2. **Skill-as-procedure** — what the eleven skills here are. You write the
    sequence in prose; Claude executes it. Deterministic enough, editable,
    no code. **Start here.**
 3. **Workflow scripts** — real JS with parallel fan-out, for fifty items.

@@ -1,6 +1,6 @@
 ---
 name: li-bug-fix
-description: Root-cause-first pipeline for a defect — reproduce, diagnose with competing hypotheses, map the blast radius, write a failing test, emit a bug ticket, then fix and verify. Use when the user reports a bug, pastes an error message, a test is failing, or behavior is wrong. Diagnosis is gated and can be the whole deliverable. Refuses to patch symptoms without a root cause.
+description: Root-cause-first pipeline for a defect in behavior — reproduce, diagnose with competing hypotheses, map the blast radius, write a failing test, emit a bug ticket, then fix and verify. Use when the user reports a bug, pastes an error message, or behavior is wrong. Diagnosis is gated and can be the whole deliverable. For a suite that went red after a merge or upgrade, where the tests themselves may be stale, use li-test-repair. Refuses to patch symptoms without a root cause.
 ---
 
 # Bug fix pipeline
