@@ -20,7 +20,14 @@
     "architecture",
     "workflow"
   ],
-  "agents": ["./.claude/agents/"],
+  "agents": [
+    "./.claude/agents/li-architect.md",
+    "./.claude/agents/li-backend-engineer.md",
+    "./.claude/agents/li-database-engineer.md",
+    "./.claude/agents/li-product-manager.md",
+    "./.claude/agents/li-qa.md",
+    "./.claude/agents/li-reviewer.md"
+  ],
   "commands": ["./.claude/commands/"],
   "skills": ["./.claude/skills/"]
 }
