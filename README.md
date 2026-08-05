@@ -13,7 +13,7 @@ Two layers, deliberately separated:
 ```
 .claude/            ← the machine layer. Claude Code reads this.
   agents/           six specialists, each with its own fresh context
-  skills/           nine orchestration procedures
+  skills/           ten orchestration procedures
   commands/         slash-command entry points
 
 standards/          ← the human layer. People read it; agents are TOLD to.
@@ -36,7 +36,7 @@ plugin. The manifest (`.claude-plugin/plugin.json`) points at the existing
 `.claude/` directories, so the agents, skills, and commands load without any
 files moving.
 
-**Try it in one session (no install).** From the repo root:
+**Try it in one session (no install).** From the repo root:[GID-Identidade-Auth-Documentacao.md](../../../Library/Application%20Support/Claude/local-agent-mode-sessions/8aee9f55-93e5-48f9-b471-6ad5d435bfe6/b80d5763-6a16-4fd3-b18a-f19e99ee9960/local_3f6eee5d-7aae-41f2-93c6-eaf659810bbe/outputs/GID-Identidade-Auth-Documentacao.md)
 
 ```
 claude --plugin-dir ./
@@ -53,7 +53,7 @@ marketplace defined in `.claude-plugin/marketplace.json`:
 ```
 
 `liniatech` is the marketplace name; `engineering-agents` is the plugin. After
-installing, the six agents, nine skills, and four commands are available in any
+installing, the six agents, ten skills, and seven commands are available in any
 project — no per-repo copy required.
 
 ## The three mechanisms
@@ -92,41 +92,43 @@ Three consequences that drive the whole design:
 
 | Agent | Owns | Cannot |
 |---|---|---|
-| `product-manager` | PRD, acceptance criteria, edge cases | design or code |
-| `architect` | boundaries, contracts, ADRs, tradeoffs | write code, design schema |
-| `database-engineer` | schema, indexes, migrations | write app code, run migrations |
-| `backend-engineer` | implementation and tests | schema, infra, requirements |
-| `reviewer` | code quality, security, correctness | write code *(no Edit/Write tool)* |
-| `qa` | spec↔code↔test coverage gaps | change production code |
+| `li-product-manager` | PRD, acceptance criteria, edge cases | design or code |
+| `li-architect` | boundaries, contracts, ADRs, tradeoffs | write code, design schema |
+| `li-database-engineer` | schema, indexes, migrations | write app code, run migrations |
+| `li-backend-engineer` | implementation and tests | schema, infra, requirements |
+| `li-reviewer` | code quality, security, correctness | write code *(no Edit/Write tool)* |
+| `li-qa` | spec↔code↔test coverage gaps | change production code |
 
-The `tools:` field enforces these. `reviewer` has no `Edit` or `Write`, so
+The `tools:` field enforces these. `li-reviewer` has no `Edit` or `Write`, so
 "never writes code" is structural, not a request it might rationalize past.
 
-`reviewer` and `qa` are genuinely different lenses: `reviewer` judges the
-code, `qa` judges whether the tests prove the spec.
+`li-reviewer` and `li-qa` are genuinely different lenses: `li-reviewer` judges the
+code, `li-qa` judges whether the tests prove the spec.
 
 ## The workflows
 
 | Skill | Use for | Core discipline |
 |---|---|---|
-| `project-kickoff` | starting a greenfield project | discovery interview → PRD → SDD + ADR backbone; ends at a task list |
-| `new-feature` | building something new | human gates after spec and architecture |
-| `bug-fix` | a defect | reproduce → root cause → **failing test** → fix |
-| `code-review` | a diff or PR | two parallel lenses, findings verified before reported |
-| `database-change` | schema work | expand/contract; humans run migrations |
-| `architecture-review` | a design or ADR | catches over- *and* under-engineering |
-| `dependency-upgrade` | version bumps | read every intermediate changelog |
-| `incident` | production is down | **mitigate first**, diagnose second |
-| `performance-review` | something is slow | no optimizing without a measurement |
-| `release` | cutting a release | deploy ordering + written abort criteria |
+| `li-project-kickoff` | starting a greenfield project | discovery interview → PRD → SDD + ADR backbone; ends at a task list |
+| `li-new-feature` | building something new | human gates after spec and architecture |
+| `li-bug-fix` | a defect | hypothesis elimination → blast radius → **failing test** → ticket → gate → fix |
+| `li-code-review` | a diff or PR | two parallel lenses, findings verified before reported |
+| `li-database-change` | schema work | expand/contract; humans run migrations |
+| `li-architecture-review` | a design or ADR | catches over- *and* under-engineering |
+| `li-dependency-upgrade` | version bumps | read every intermediate changelog |
+| `li-incident` | production is down | **mitigate first**, diagnose second |
+| `li-performance-review` | something is slow | no optimizing without a measurement |
+| `li-release` | cutting a release | deploy ordering + written abort criteria |
 
 ## Commands
 
-- `/kickoff <what to build>` — greenfield project: interview → PRD → ADRs → tasks
-- `/feature <what to build>` — full pipeline with approval gates
-- `/bugfix <the bug>` — root-cause-first fix
-- `/review [PR or branch]` — multi-lens review
-- `/spec <idea>` — PRD only, no code
+- `/li-kickoff <what to build>` — greenfield project: interview → PRD → ADRs → tasks
+- `/li-feature <what to build>` — full pipeline with approval gates
+- `/li-bugfix <the bug>` — root-cause-first fix, diagnosis gated
+- `/li-diagnose <the bug>` — deep diagnosis + repro test + bug ticket, no fix
+- `/li-review [PR or branch]` — multi-lens review
+- `/li-spec <idea>` — PRD only, no code
+- `/li-demo [brief]` — self-test: run kickoff on a brief (default the Roomie one) and regenerate the example
 
 You can also just describe the task; Claude matches the skill `description`
 and runs it. The commands are for when you want to be explicit.
@@ -147,7 +149,7 @@ and runs it. The commands are for when you want to be explicit.
 **Never self-review.** An agent reviewing its own output approves it. Every
 review step here is a fresh spawn given only the diff.
 
-**Cap the convergence loop.** `new-feature` stops at three review→fix
+**Cap the convergence loop.** `li-new-feature` stops at three review→fix
 iterations and escalates. Without a cap, two agents will politely disagree
 forever.
 

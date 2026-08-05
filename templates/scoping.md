@@ -1,7 +1,7 @@
 # {SLUG} — Discovery
 
 Raw material from the kickoff interview. The user's words, not yet formalized.
-`product-manager` reads this to write `PRD-{SLUG}-001`.
+`li-product-manager` reads this to write `PRD-{SLUG}-001`.
 
 ## The problem
 

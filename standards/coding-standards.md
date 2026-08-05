@@ -1,6 +1,6 @@
 # Coding Standards
 
-Read by `backend-engineer`, `reviewer`, and `qa`. Python-flavored; the
+Read by `li-backend-engineer`, `li-reviewer`, and `li-qa`. Python-flavored; the
 principles are language-independent.
 
 **The rule above all others:** match the code around you. A change written in

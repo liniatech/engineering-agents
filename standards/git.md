@@ -1,6 +1,6 @@
 # Git Standards
 
-Read by `reviewer`. The goal of every rule here is the same: make the history
+Read by `li-reviewer`. The goal of every rule here is the same: make the history
 answer "why does this line exist?" a year from now.
 
 ## Branch naming

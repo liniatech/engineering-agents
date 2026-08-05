@@ -3,7 +3,7 @@
   "name": "engineering-agents",
   "displayName": "Engineering Agents",
   "version": "0.1.0",
-  "description": "A reusable engineering team for Claude Code: six specialist agents, nine workflow pipelines, and the standards and templates they read.",
+  "description": "A reusable engineering team for Claude Code: six specialist agents, ten workflow pipelines, and the standards and templates they read.",
   "author": {
     "name": "Alini Ribeiro",
     "email": "alini@launchpotato.com",

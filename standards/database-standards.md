@@ -1,6 +1,6 @@
 # Database Standards
 
-Read by `database-engineer`. PostgreSQL.
+Read by `li-database-engineer`. PostgreSQL.
 
 The schema outlives the application code. Decisions here are the most
 expensive to reverse in the system.
@@ -49,7 +49,7 @@ pointing at it. This is the most common performance defect in a schema.
   the column should have been `NOT NULL DEFAULT 0`.
 - Adding `NOT NULL` to an existing column requires a backfill first, then
   the constraint added `NOT VALID` and validated separately — see the
-  `database-change` skill.
+  `li-database-change` skill.
 
 ## Avoid nullable booleans
 

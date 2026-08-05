@@ -1,6 +1,6 @@
 # Architecture Principles
 
-Read by `architect` and `reviewer`.
+Read by `li-architect` and `li-reviewer`.
 
 These are defaults, not laws. Each may be overridden — in an ADR, with the
 reason and the tradeoff written down. An unrecorded deviation is the thing

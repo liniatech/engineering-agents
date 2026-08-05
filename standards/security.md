@@ -1,6 +1,6 @@
 # Security Standards
 
-Read by `architect`, `backend-engineer`, and `reviewer`. Every rule here is
+Read by `li-architect`, `li-backend-engineer`, and `li-reviewer`. Every rule here is
 checkable — if you cannot tell whether a diff complies, the rule is badly
 written; fix the rule.
 

@@ -1,6 +1,6 @@
 # API Guidelines
 
-Read by `architect`, `backend-engineer`, and `reviewer`.
+Read by `li-architect`, `li-backend-engineer`, and `li-reviewer`.
 
 An API is a contract you cannot unilaterally break. Everything here follows
 from that.

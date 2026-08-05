@@ -2,7 +2,7 @@
 
 The documented architecture, broken into tasks an engineer can pick up. This
 is the kickoff's final deliverable. Each task is built separately afterward
-(e.g. via `/feature`), not in the kickoff run.
+(e.g. via `/li-feature`), not in the kickoff run.
 
 ## Ordering
 

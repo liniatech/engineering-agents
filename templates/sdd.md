@@ -6,35 +6,45 @@
 
 Why this system exists. Link to `PRD-{SLUG}-001`.
 
-## C4 — Level 1: System Context
+> Use plain `flowchart` diagrams (not the `C4Context`/`C4Container` mermaid
+> dialect — it renders poorly in many previews). Keep each to a handful of
+> nodes and open every level with a one-line caption saying what it shows.
 
-Who and what the system talks to. One diagram.
+## Level 1 — System context
 
-```mermaid
-C4Context
-  title System Context — {SLUG}
-  Person(user, "User", "")
-  System(sys, "{SLUG}", "")
-  System_Ext(ext, "External system", "")
-  Rel(user, sys, "Uses")
-  Rel(sys, ext, "Calls")
-```
-
-## C4 — Level 2: Containers
-
-The deployable/runnable units and the data stores. One diagram.
+**What this shows:** who uses {SLUG} and which external systems it talks to.
 
 ```mermaid
-C4Container
-  title Containers — {SLUG}
-  Container(api, "API", "", "")
-  ContainerDb(db, "Database", "", "")
-  Rel(api, db, "Reads/writes")
+flowchart LR
+  user["User"] --> sys["{SLUG}"]
+  sys --> ext["External system"]
 ```
 
-## C4 — Level 3: Components
+## Level 2 — Containers
 
-The internal pieces of the container that matters most. One diagram.
+**What this shows:** the deployable/runnable units and the data stores inside
+{SLUG}, and how they connect.
+
+```mermaid
+flowchart TB
+  web["Web / client"] --> api["API"]
+  api --> db[("Database")]
+```
+
+## Level 3 — Components
+
+**What this shows:** the internal pieces of the one container that matters most
+(usually the API), and which one owns each responsibility.
+
+```mermaid
+flowchart TB
+  subgraph api["API"]
+    a["Component A"]
+    b["Component B"]
+  end
+  a --> db[("Database")]
+  b --> db
+```
 
 ## Key decisions & their ADRs
 

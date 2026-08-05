@@ -1,6 +1,6 @@
 # Testing Standards
 
-Read by `backend-engineer` and `qa`.
+Read by `li-backend-engineer` and `li-qa`.
 
 A test suite exists to let you change code with confidence. A suite that
 passes while the system is broken is worse than none, because it spends

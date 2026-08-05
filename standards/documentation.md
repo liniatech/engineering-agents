@@ -1,6 +1,6 @@
 # Documentation Standards
 
-Read by `product-manager`. Documentation exists for the person who arrives
+Read by `li-product-manager`. Documentation exists for the person who arrives
 after you leave, and for you in six months, who will remember nothing.
 
 ## The rule that matters most
