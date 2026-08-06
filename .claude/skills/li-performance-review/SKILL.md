@@ -9,6 +9,20 @@ description: Measure-first performance investigation — profile, find the real 
 reliably wrong, and an optimization without a before-number cannot be shown
 to have worked.
 
+## Deliverable — a file, always
+
+This skill produces **`docs/performance/<date>-<slug>.md`**, using
+`templates/performance-report.md`.
+
+Read `standards/deliverables.md`. The report is written to disk with the
+`Write` tool **before** anything is printed in chat. Numbers that live only in
+a terminal are numbers nobody can compare against next time — and the whole
+discipline here is comparison.
+
+Write the file as soon as you have the baseline (step 2), then update it in
+place at step 6 and step 8. That way the before-number survives even if the
+optimization goes nowhere.
+
 ## Steps
 
 ### 1. Define the target
@@ -29,6 +43,10 @@ finish line does not have one.
 Get a real number before touching code. Profile, time the query, read the
 APM trace. Record the method so it can be repeated identically afterwards —
 a before and after measured differently prove nothing.
+
+**Create the file now.** `mkdir -p docs/performance`, `date +%F`, then `Write`
+`docs/performance/<date>-<slug>.md` from `templates/performance-report.md` with
+Target, Method, and Baseline filled in. The rest gets filled as you go.
 
 ### 3. Find the actual bottleneck
 
@@ -77,18 +95,25 @@ A performance fix with no regression test decays. Add whichever fits:
 - A benchmark with a threshold
 - An alert on the metric
 
-### 8. Report
+### 8. Finish the file, then report
+
+`Edit` `docs/performance/<date>-<slug>.md` to completion — Bottleneck with its
+evidence and share-of-total, the eliminated candidates, Change, After with the
+raw output, Guard, and Remaining. Set `status: resolved`.
+
+Then, in chat:
 
 ```
-Operation:  <what>
-Metric:     <which>
-Before:     <number, and how measured>
-Bottleneck: <what it actually was, with evidence>
-Change:     <what was done>
-After:      <number, same method>
+Operation:   <what>
+Metric:      <which>
+Before:      <number, and how measured>
+Bottleneck:  <what it actually was, with evidence>
+Change:      <what was done>
+After:       <number, same method>
 Improvement: <x% / Nms>
-Guard:      <the test or alert that prevents regression>
-Remaining:  <the next bottleneck, now that this one is gone>
+Guard:       <the test or alert that prevents regression>
+Remaining:   <the next bottleneck, now that this one is gone>
+Report:      docs/performance/<date>-<slug>.md
 ```
 
 ## Never
@@ -98,3 +123,5 @@ Remaining:  <the next bottleneck, now that this one is gone>
 - Never report an improvement measured differently from the baseline.
 - Never trade correctness for speed without saying so explicitly.
 - Never cache to hide an N+1. Fix the query.
+- Never report numbers without writing the file. An investigation that found
+  nothing worth changing still gets one — the baseline is the value.

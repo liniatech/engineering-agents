@@ -128,8 +128,9 @@ in two phases with a gate between them.
    a verdict. Done here, before anything is patched, not after.
 4. Write a **failing test** that captures the bug, run it, confirm it fails for
    the right reason.
-5. Write the ticket to `docs/bugs/<slug>.md` with a task title you can paste
-   straight into a tracker.
+5. Write the ticket to `docs/bugs/<slug>.md` — a real file on disk, created
+   before you're shown anything — with a task title you can paste straight into
+   a tracker.
 
 **── gate ──** you see the title, cause, what was ruled out, and the blast
 radius, and approve before any production code is touched.
@@ -385,13 +386,40 @@ Three rules this enforces, all structural:
 - **Handoffs are files, not memory.** If it isn't written to disk or pasted
   into the next prompt, the next agent never learns it.
 
+## What lands on disk
+
+Every pipeline owes you a `.md` file. It is written **before** the summary
+appears in chat, and the chat block is a pointer to it — never a substitute.
+`standards/deliverables.md` is the rule; each skill names its own path.
+
+| You ran | You get |
+|---|---|
+| `/li-bugfix`, `/li-diagnose` | `docs/bugs/<slug>.md` |
+| `/li-review` | `docs/reviews/<date>-<slug>-code-review.md` |
+| `li-architecture-review` | `docs/reviews/<date>-<slug>-architecture.md` |
+| `li-performance-review` | `docs/performance/<date>-<slug>.md` |
+| `/li-fixtests` | `docs/reports/<date>-<slug>-test-repair.md` |
+| `li-dependency-upgrade` | `docs/reports/<date>-<slug>-upgrade.md` |
+| `li-release` | `docs/releases/<version>.md` |
+| `li-incident` | `docs/incidents/<date>-<slug>.md` |
+| `li-database-change` | `docs/database/<slug>.md` |
+| `/li-spec`, `/li-feature` | `docs/features/<slug>/{prd,adr,migration,review}.md` |
+| `/li-kickoff` | `docs/scoping/`, `docs/ADRs/`, `docs/plan/` |
+
+If a run ends with no file, it skipped its deliverable — say so and it will
+write it.
+
 ## Making it follow your conventions
 
 The agents are told to read specific files at the start of each run. To change
 what they enforce, edit the source — no code, all Markdown:
 
-- `standards/` — coding, API, database, security, testing, git conventions
-- `templates/` — the output shapes (PRD, ADR, RFC, migration, postmortem, …)
+- `standards/` — coding, API, database, security, testing, git, documentation,
+  and deliverable conventions
+- `standards/deliverables.md` — which `.md` file each pipeline must write, and
+  where. Change the paths here to change where everything lands.
+- `templates/` — the output shapes (PRD, ADR, RFC, migration, postmortem,
+  code review, performance, test repair, upgrade, release, …)
 - `.claude/agents/<name>.md` — an agent's system prompt, tools, and its
   `## Never` section (the highest-value part to tune)
 - `.claude/skills/<name>/SKILL.md` — a workflow's step sequence and gates
@@ -407,6 +435,7 @@ After editing anything under `.claude/` while a session is open, run
 | Agents ignore your standards | `standards/` isn't in the project being worked on, or the agent's "Before you start" section was edited out |
 | `/li-feature` blew past a gate | It should announce skips; if it didn't, tighten the gate wording in `.claude/skills/li-new-feature/SKILL.md` |
 | A migration was written but not applied | Correct — agents never run migrations; apply it yourself |
+| A report came back in chat with no file | The pipeline skipped its deliverable. Every pipeline names one — see `standards/deliverables.md` for the path it owes you, and say "write it to the file" |
 | Review keeps looping | The convergence cap (three rounds) escalates to you by design; decide the disagreement |
 
 ## Where to go next

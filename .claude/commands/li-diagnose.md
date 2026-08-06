@@ -18,8 +18,9 @@ I want the diagnosis as the deliverable:
 - Blast radius — every other site sharing the same cause, with a verdict each.
 - A test that fails **because of this bug**, run and confirmed failing for the
   right reason.
-- The ticket at `docs/bugs/<slug>.md`, with a task title I can paste straight
-  into a tracker.
+- The ticket **written to `docs/bugs/<slug>.md`** with the Write tool, with a
+  task title I can paste straight into a tracker. The file is the deliverable —
+  show me a summary and the path, not the ticket pasted into chat.
 
 **Stop at the gate.** Do not fix anything, and do not offer to — I will run
 `/li-bugfix docs/bugs/<slug>.md` when I want the fix.

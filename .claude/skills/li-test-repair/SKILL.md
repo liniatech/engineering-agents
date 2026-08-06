@@ -12,6 +12,16 @@ regression ships behind a green suite.
 So this skill has one hard boundary: **it edits test files and nothing else.**
 If the fix belongs in source, it says so and stops.
 
+## Deliverable — a file, always
+
+This skill produces **`docs/reports/<date>-<slug>-test-repair.md`**, using
+`templates/test-repair-report.md`.
+
+Read `standards/deliverables.md`. The report is written to disk with the
+`Write` tool **before** the gate in step 5, and finished before the final
+report. The attribution table is the part someone will need again in a month —
+it cannot live only in a terminal.
+
 ## Before you start
 
 Read `standards/testing-standards.md` — repaired and added tests conform to it.
@@ -82,7 +92,12 @@ Two rules on this table:
   changed this behavior" is not evidence it *meant* to — that sentence
   describes a regression just as well.
 
-### 5. Report and ask — before touching anything
+### 5. Write the report, then ask — before touching anything
+
+First, the file. `mkdir -p docs/reports`, `date +%F`, then **`Write`**
+`docs/reports/<date>-<slug>-test-repair.md` from
+`templates/test-repair-report.md` with Baseline, Failure groups, the culprit
+prose, and Evidence-per-verdict filled in. Repair sections stay empty for now.
 
 **GATE — human.** Nothing has been edited yet. Show the table:
 
@@ -141,7 +156,16 @@ repaired.
 - `REAL BUG` and quarantined `FLAKE` tests are still red. That is correct — do
   not present the suite as green.
 
-### 9. Report
+### 9. Finish the file, then report
+
+`Edit` `docs/reports/<date>-<slug>-test-repair.md`: fill Repaired, Added, Still
+red, After (with the real output and the before/after counts), and Not run. Set
+`status: resolved`.
+
+The `Edit` of the report is not a source-file edit — the one-file-type boundary
+in this skill is about the code under test, not about your own deliverable.
+
+Then, in chat:
 
 ```
 Suite before: N passed, M failed  (<command> on <short-sha>)
@@ -152,6 +176,7 @@ Added:        <complementary tests from li-qa>
 Still red:    <REAL BUG tests + the likely commit, handed to li-bug-fix>
 Quarantined:  <FLAKE tests, and why>
 Not run:      <anything skipped, and why>
+Report:       docs/reports/<date>-<slug>-test-repair.md
 ```
 
 Do not commit or push. That is the user's call.
@@ -168,3 +193,5 @@ Do not commit or push. That is the user's call.
   Write "likely".
 - Never repair before the gate.
 - Never report the suite as green while `REAL BUG` failures are outstanding.
+- Never show the verdict table in chat without having written
+  `docs/reports/<date>-<slug>-test-repair.md` first.

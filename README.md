@@ -84,6 +84,10 @@ Three consequences that drive the whole design:
 - **Handoffs must be materialized.** Anything crossing an agent boundary is
   written to a file or pasted into the next prompt. The pipelines write
   artifacts to `docs/features/<slug>/` for precisely this reason.
+- **Every deliverable is a file.** Reports, analyses, tickets, and reviews are
+  written to `docs/` *before* being summarized in chat — the summary is a
+  pointer, never the deliverable. `standards/deliverables.md` defines the paths
+  and the rule; every pipeline names its own output file.
 - **Agents cannot call each other.** They return a `BLOCKED:` line; the
   orchestrating skill routes it. That is why every agent has a "Handoff
   signals" section instead of "delegate to X".

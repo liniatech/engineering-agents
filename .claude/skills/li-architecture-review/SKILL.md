@@ -8,6 +8,16 @@ description: Reviews a design, ADR, RFC, or existing system against the architec
 This reviews *structure*, not code. If the question is "is this diff good",
 use `li-code-review` instead.
 
+## Deliverable — a file, always
+
+This skill produces **`docs/reviews/<date>-<slug>-architecture.md`**, using
+`templates/design-review.md`.
+
+Read `standards/deliverables.md`. The review is written to disk with the
+`Write` tool **before** anything is printed in chat; the chat output is the
+verdict, the top concerns, and the path. Architecture findings outlive the
+conversation that produced them — they have to be readable next quarter.
+
 ## Steps
 
 ### 1. Establish what is under review
@@ -64,27 +74,40 @@ If the tradeoff was not named, it was not made. Ask what is being given up.
 
 Both are findings. Reviewers reliably catch the second and miss the first.
 
-### 6. Report
+### 6. Write the review file — before reporting
+
+1. `mkdir -p docs/reviews`
+2. `date +%F` for the date — never guess it.
+3. **Call the `Write` tool** to create
+   `docs/reviews/<date>-<slug>-architecture.md` from
+   `templates/design-review.md`, filling every section:
+
+- **Verdict** — sound | concerns | reconsider
+- **What this is** — your reconstruction of the design in your own words. A
+  mismatch with the author's intent is itself the first finding.
+- **Scope reviewed** — and what was explicitly not.
+- **Boundaries, contracts, failure modes** — the lens tables from step 3.
+- **Concerns** — ordered by cost-to-fix-later, not severity-today. Each: the
+  concern, the scenario that makes it bite, the earliest warning signal, the
+  cost now vs. later.
+- **Unstated tradeoffs** — what is being given up that the document does not
+  admit.
+- **Over- / under-engineering** — both directions, from step 5.
+- **Reversibility** — each major decision: cheap / expensive / one-way.
+- **Alternatives** — real ones, or one option and two straw men?
+- **Questions for the author** and **Action items** with owners.
+
+### 7. Report — the pointer, not the review
+
+Only after the file exists:
 
 ```
-## Verdict
-sound | concerns | reconsider
-
-## What this is
-Your reconstruction of the design, in your own words. If this does not match
-the author's intent, that mismatch is itself the finding.
-
-## Concerns
-Ordered by cost-to-fix-later, not by severity-today.
-Each: the concern, the scenario that makes it bite, the earliest signal.
-
-## Unstated tradeoffs
-What is being given up that the document does not admit.
-
-## Reversibility
-For each major decision: cheap / expensive / one-way.
-
-## Questions for the author
+Verdict:     sound | concerns | reconsider
+Design:      <what was reviewed>
+Concerns:    N — <the top two, one line each>
+One-way:     <decisions that are expensive or impossible to undo>
+Questions:   N open for the author
+Review:      docs/reviews/<date>-<slug>-architecture.md
 ```
 
 ## Never
@@ -93,3 +116,5 @@ For each major decision: cheap / expensive / one-way.
 - Never propose a rewrite as a review finding. If that is your conclusion,
   say it plainly as its own recommendation with a cost estimate.
 - Never approve a design whose failure modes are undefined.
+- Never print the review in chat instead of writing the file. A verdict with
+  no document behind it cannot be revisited when the design changes.

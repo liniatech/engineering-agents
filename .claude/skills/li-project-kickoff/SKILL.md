@@ -47,7 +47,11 @@ to fill; agents never invent the numbering or the file name.
 
 Subagents share no context. Anything crossing a handoff is written to a file
 and its **path** passed to the next agent. Agents return the document text;
-**you** save it to the numbered path.
+**you** save it to the numbered path with the `Write` tool, before the gate for
+that step.
+
+Read `standards/deliverables.md`. Showing a document in chat is not saving it.
+Every path in *What this produces* must exist on disk by the time you report.
 
 ## Output style — diagram-first and tight
 

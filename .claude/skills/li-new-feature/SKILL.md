@@ -18,9 +18,15 @@ Prefer files for anything longer than a paragraph:
 docs/features/<slug>/prd.md
 docs/features/<slug>/adr.md
 docs/features/<slug>/migration.md
+docs/features/<slug>/review.md      ← step 6's findings
 ```
 
 Pass the *paths* to downstream agents and tell them to read them.
+
+Read `standards/deliverables.md`. Every one of these is created with the
+`Write` tool at the step that produces it, before the gate for that step is
+shown. An artifact that only appeared in chat cannot be read by the next
+agent — which is the entire reason this rule exists here.
 
 ## Steps
 
@@ -78,6 +84,10 @@ this to the agent that wrote the code; a self-review is worthless.
 Give each only what it needs: the base branch to diff against, and the PRD
 path for the acceptance criteria.
 
+Write their combined findings to `docs/features/<slug>/review.md` using
+`templates/code-review.md` — before you act on them. Step 7 loops against that
+file, and it is the record of what was accepted rather than fixed.
+
 ### 7. Converge
 
 If `li-reviewer` returns Critical findings or `li-qa` returns gaps:
@@ -106,3 +116,7 @@ Do not commit or push. That is the user's call.
 
 If a step failed, say it failed. If you skipped a gate, say so. A pipeline
 report that hides a skipped step is worse than no report.
+
+If you skipped an artifact — no ADR because the change was confined to one
+module, no migration because the schema did not move — say which file does not
+exist and why. Silence reads as "it's there".

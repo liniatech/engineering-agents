@@ -11,6 +11,15 @@ fix until you can reproduce the bug and name its cause.**
 Two phases, with a human gate between them. Phase 1 produces a written
 diagnosis that stands on its own — it is a deliverable, not a warm-up.
 
+## Deliverable — a file, always
+
+This skill produces **`docs/bugs/<slug>.md`**. That file is the deliverable.
+
+Read `standards/deliverables.md`. In short: the ticket is written to disk with
+the `Write` tool **before** anything is printed in chat, and the chat output is
+a short pointer to it. A ticket that only appeared in the terminal did not
+happen.
+
 ## Before you start
 
 Read `templates/bug-report.md` — phase 1 writes that shape. Read
@@ -107,9 +116,22 @@ If the bug is genuinely untestable (a UI rendering artifact, a race that will
 not reproduce deterministically), say so explicitly and describe how you will
 verify manually instead.
 
-### 5. Write the ticket
+### 5. Write the ticket — to a file, with the Write tool
 
-Write `docs/bugs/<slug>.md` using `templates/bug-report.md`.
+**This step is a file operation, not a piece of prose.** Do it now, before you
+say anything to the user:
+
+1. `mkdir -p docs/bugs` — create it if it does not exist.
+2. `date +%F` — for the `date:` field. Never guess it.
+3. **Call the `Write` tool** to create `docs/bugs/<slug>.md`, filled from
+   `templates/bug-report.md`, with the frontmatter from
+   `standards/deliverables.md` (`type: bug`, `status: open`).
+
+`<slug>` is short, lowercase, hyphenated, and names the failure:
+`webhook-drops-events-missing-user-id`.
+
+Printing the ticket in chat does **not** satisfy this step. If the `Write` tool
+has not run, the ticket does not exist and phase 1 is not done.
 
 **Task title** — one line, imperative, naming the observable failure and the
 surface it happens on. It has to survive being pasted into a tracker with no
@@ -124,7 +146,7 @@ Fill every section you have evidence for. Mark what you do not know
 hypotheses from step 2 and the blast radius from step 3 — a ticket that shows
 what the bug *isn't* is worth more than one that only asserts what it is.
 
-**GATE — human.** Show the user, and nothing more:
+**GATE — human.** The file exists by now. Show the user, and nothing more:
 
 ```
 Title:        <the task title>
@@ -169,12 +191,14 @@ Spawn a fresh `li-reviewer` with the diff and the ticket path. Ask it
 specifically: does the fix address the stated root cause, and does it hold for
 every blast-radius site the ticket lists as affected?
 
-### 9. Close the ticket
+### 9. Close the ticket — edit the file
 
-Update `docs/bugs/<slug>.md`: confirm the Root cause section, fill in Fix with
-what changed and the guarding test. If the fix proved the diagnosis wrong,
-**correct the ticket** — a ticket left asserting a refuted cause is a trap for
-the next person.
+`Edit` the same `docs/bugs/<slug>.md`: set `status: resolved`, confirm the Root
+cause section, fill in Fix with what changed and the guarding test. If the fix
+proved the diagnosis wrong, **correct the ticket** — a ticket left asserting a
+refuted cause is a trap for the next person.
+
+Do not write a second file for the fix. One bug, one ticket, updated in place.
 
 ### 10. Report
 
@@ -199,3 +223,5 @@ Do not commit or push. That is the user's call.
 - Never remove or weaken a failing test to make the suite green.
 - Never report "fixed" without having re-run the reproduction.
 - Never leave the ticket asserting a cause the fix disproved.
+- Never print the ticket in chat instead of writing `docs/bugs/<slug>.md`. The
+  file is the deliverable; the chat block is a pointer to it.

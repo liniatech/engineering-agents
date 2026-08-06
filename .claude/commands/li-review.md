@@ -10,4 +10,8 @@ Target: $ARGUMENTS
 If no target is given, review the uncommitted working tree; if that is clean,
 review this branch against its base.
 
+**Write the review to `docs/reviews/<date>-<slug>-code-review.md` before you
+report.** I want the file, with every finding and its `file:line`; the chat
+output should be the verdict, the counts, and the path.
+
 Report findings — do not apply fixes without asking me first.

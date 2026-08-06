@@ -21,3 +21,8 @@ delete, or weaken a test to get the suite green.
 
 Once the repairs pass, add complementary tests for the edge cases the changed
 behavior left uncovered.
+
+Write all of it — baseline, the grouped verdict table, the attribution, and the
+final before/after counts — to
+`docs/reports/<date>-<slug>-test-repair.md`. The file, not just the chat
+output; give me its path when you are done.

@@ -12,6 +12,18 @@ are affected now.
 Everything below assumes a human is in the loop and taking the actions. You
 are assisting, not operating.
 
+## Deliverable — a file, always
+
+This skill produces **`docs/incidents/<date>-<slug>.md`**, using
+`templates/postmortem.md`.
+
+Read `standards/deliverables.md`. One exception to the write-first rule lives
+here: **during phase 1, mitigation comes before documentation.** Keep a running
+timeline as you go, and write the file the moment service is stable — the
+timeline is unreconstructable an hour later.
+
+Phases 2 and 3 follow the normal rule: file first, chat summary second.
+
 ## Phase 1 — Stabilize
 
 ### 1. Establish impact
@@ -53,6 +65,12 @@ and what it will do; a human executes it.
 Verify with a signal, not a hope. Which metric, which log line, which
 request — name it and check it. State plainly if the recovery is partial.
 
+**Now write the file.** `mkdir -p docs/incidents`, `date +%F`, then use the
+`Write` tool to create
+`docs/incidents/<date>-<slug>.md` from `templates/postmortem.md` with impact,
+the timeline so far (real timestamps, including detection and mitigation), and
+the mitigating action taken. `status: draft`. Phases 2 and 3 fill the rest.
+
 ## Phase 2 — Diagnose
 
 Only once service is restored.
@@ -66,7 +84,10 @@ explicitly; a rolled-back incident is not a closed incident.
 
 ## Phase 3 — Postmortem
 
-Write it while memory is fresh. Use `templates/postmortem.md`.
+Finish `docs/incidents/<date>-<slug>.md` while memory is fresh — the same file
+started in phase 1, now completed against `templates/postmortem.md` and set to
+`status: resolved`. Report the path in chat; do not paste the postmortem there
+instead of writing it.
 
 The rules that make a postmortem worth writing:
 
@@ -88,3 +109,5 @@ The rules that make a postmortem worth writing:
 - Never skip writing down what you did, even under pressure. The timeline
   is unreconstructable afterwards.
 - Never let the search for a root cause delay the mitigation.
+- Never close an incident without `docs/incidents/<date>-<slug>.md` on disk —
+  including one mitigated by a rollback, which is not a closed incident.

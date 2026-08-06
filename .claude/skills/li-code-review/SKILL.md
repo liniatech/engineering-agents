@@ -10,6 +10,16 @@ because a confident review agent will produce plausible findings that are
 simply wrong, and an unverified false finding costs more trust than a missed
 real one.
 
+## Deliverable — a file, always
+
+This skill produces **`docs/reviews/<date>-<slug>-code-review.md`**, using
+`templates/code-review.md`.
+
+Read `standards/deliverables.md`. The review is written to disk with the
+`Write` tool **before** anything is printed in chat; the chat output is a short
+verdict plus the path. A review that only appeared in the terminal cannot be
+diffed, linked, or answered.
+
 ## Steps
 
 ### 1. Establish the diff
@@ -57,27 +67,35 @@ For a deep audit, spawn independent skeptics instead: for each Critical
 finding, spawn 2–3 agents prompted to **refute** it, and keep the finding
 only if a majority fail to refute. Use this when the stakes justify the cost.
 
-### 5. Report
+### 5. Write the review file — before reporting
+
+1. `mkdir -p docs/reviews`
+2. `date +%F` for the date — never guess it.
+3. **Call the `Write` tool** to create
+   `docs/reviews/<date>-<slug>-code-review.md` from `templates/code-review.md`.
+
+`<slug>` names the change under review (`rate-limit-middleware`, `pr-482`), not
+the activity.
+
+The file carries the **full** review: every finding with `file:line`, the
+trigger, the consequence, the coverage-gap table, and the verification count.
+
+### 6. Report — the pointer, not the review
+
+Only after the file exists:
 
 ```
-## Verdict
-approve | request-changes | block
-
-## Scope
-What was reviewed (diff range, N files, N lines). What was NOT reviewed.
-
-## Critical      (blocks merge)
-file:line — defect, trigger, consequence.
-
-## Warnings      (should fix)
-## Suggestions   (optional)
-## Coverage gaps (from li-qa)
-
-## Verification
-N findings raised, M dropped as unconfirmed.
+Verdict:      approve | request-changes | block
+Scope:        <diff range> — N files, N lines
+Critical:     N   (one line each)
+Warnings:     N
+Suggestions:  N
+Coverage:     N gaps
+Verification: N raised, M dropped as unconfirmed
+Review:       docs/reviews/<date>-<slug>-code-review.md
 ```
 
-### 6. Offer, do not apply
+### 7. Offer, do not apply
 
 Ask before changing anything. Review and fix are separate acts, and the
 author gets to decide.
@@ -89,3 +107,6 @@ author gets to decide.
 - "Approve" is a real outcome. Do not invent findings to justify the review.
 - Never re-litigate an accepted ADR. Implementation-contradicts-ADR is a
   finding; disagreeing-with-the-ADR is a separate conversation.
+- Never print the review in chat instead of writing the file. Even a clean
+  "approve" with zero findings gets a file — that record is what proves the
+  change was reviewed.
